@@ -23,7 +23,13 @@ def envoyer_message(user_id, message):
     # Effectuer la requête
     response = requests.post(url, json=data, headers=headers)
     
-
+    
+    # Vérification de la réponse
+    if response.status_code == 200:
+        return response.json()  # Retourne la réponse JSON si elle est correcte
+    else:
+        st.error(f"Erreur avec l'API: {response.status_code}")
+        return None
 
 # Interface Streamlit
 st.title("Chatbot Voiceflow avec Streamlit")
