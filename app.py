@@ -31,6 +31,9 @@ def envoyer_message(user_id, message):
         st.error(f"Erreur avec l'API: {response.status_code}")
         return None
 
+
+st.markdown("<h1 style='text-align: right;'>Hadrien Poinseaux</h1>", unsafe_allow_html=True)
+
 # Couleur de fond en utilisant st.markdown pour une section
 page_bg_img = '''
 <style>
