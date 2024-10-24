@@ -54,12 +54,12 @@ if st.button("Envoyer"):
         if reponse:
             # Ajouter le message de l'utilisateur à l'historique
             st.session_state['historique'].append({"role": "user", "message": message})
-            
-            # Vérifier que la réponse est une liste et la parcourir
-            if isinstance(reponse, list):
-                for event in reponse:  # Parcourir directement la liste
-                    if isinstance(event, dict) and event.get("type") == "speak":
-                        st.session_state['historique'].append({"role": "bot", "message": event["payload"]["message"]})
+    
+            # Parcourir chaque événement dans la réponse
+            for event in reponse:
+                # Vérifier que c'est bien un type "text" et que "payload" contient "message"
+                if event.get("type") == "text" and "payload" in event:
+                    st.session_state['historique'].append({"role": "bot", "message": event["payload"]["message"]})
 
 # Afficher l'historique de la conversation
 for message in st.session_state['historique']:
