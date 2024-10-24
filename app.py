@@ -39,6 +39,7 @@ page_bg_img = '''
     background-size: cover;
     background-position: center;
     color: white;
+    padding: 20px;
 }
 </style>
 '''
@@ -55,7 +56,7 @@ if 'historique' not in st.session_state:
 if 'user_id' not in st.session_state:
     st.session_state['user_id'] = "user123"  # Peut être un identifiant unique pour chaque utilisateur
 
-message = st.text_input("Tu peux poser une question:")
+message = st.text_input("Poser vos questions:")
 
 if st.button("Envoyer"):
     if message:
