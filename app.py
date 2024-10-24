@@ -2,8 +2,8 @@ import streamlit as st
 import requests
 
 # Configuration de l'API Voiceflow
-API_KEY = "TVF.DM.671a045c21ddde63559a41cf.7jM8hYY9yfeP49f2"  # Remplace par ta clé API Voiceflow
-VERSION_ID = "6719ff054691e037ca52e0eb"  # Remplace par l'ID de version de ton projet
+API_KEY = "VF.DM.671a045c21ddde63559a41cf.7jM8hYY9yfeP49f2"  # Remplace par ta clé API Voiceflow
+VERSION_ID = "6719ff054691e037ca52e0ec"  # Remplace par l'ID de version de ton projet
 
 BASE_URL = f"https://general-runtime.voiceflow.com/state/{VERSION_ID}/user"
 
