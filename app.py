@@ -31,25 +31,23 @@ def envoyer_message(user_id, message):
         st.error(f"Erreur avec l'API: {response.status_code}")
         return None
 
-# Injecter du CSS pour personnaliser le fond
-page_bg_img = '''
+# Injecter du CSS pour personnaliser le fond avec une couleur unie
+page_bg_color = '''
 <style>
 body {
-    background-image: url("https://images.unsplash.com/photo-1503676260728-1c00da094a0b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDEwfGVkdWNhdGlvbnxlbnwwfHx8fDE2NDk1Nzc3NjI&ixlib=rb-1.2.1&q=80&w=1080");
-    background-size: cover;
-    background-position: center;
-    color: green;
+    background-color: #f0f8ff; /* Remplacez cette couleur par celle de votre choix */
+    color: #333; /* Couleur du texte */
     padding: 20px;
 }
 </style>
 '''
-st.markdown(page_bg_img, unsafe_allow_html=True)
+st.markdown(page_bg_color, unsafe_allow_html=True)
 
 # Ajouter une image au-dessus du titre (liée à l'éducation)
 st.image("https://images.unsplash.com/photo-1503676260728-1c00da094a0b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDEwfGVkdWNhdGlvbnxlbnwwfHx8fDE2NDk1Nzc3NjI&ixlib=rb-1.2.1&q=80&w=1080", use_column_width=True)
 
 # Interface Streamlit
-st.title("assitant ASH pour les parents")
+st.title("Assistant ASH pour les parents")
 
 if 'historique' not in st.session_state:
     st.session_state['historique'] = []
