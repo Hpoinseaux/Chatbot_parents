@@ -45,8 +45,8 @@ if st.button("Envoyer"):
         if reponse:
             # Ajouter le message de l'utilisateur et la réponse du chatbot à l'historique
             st.session_state['historique'].append({"role": "user", "message": message})
-            for event in reponse["state"]:
-                if event.get("type") == "speak":
+            for event in  reponse.get("state", []):  # Utiliser .get() pour éviter les KeyErrors si "state" n'existe pas
+               if isinstance(event, dict) and event.get("type") == "speak":  # Vérifier que c'est un dictionnaire
                     st.session_state['historique'].append({"role": "bot", "message": event["payload"]["message"]})
     
 # Afficher l'historique de la conversation
