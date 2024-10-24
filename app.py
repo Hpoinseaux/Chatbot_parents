@@ -32,16 +32,15 @@ def envoyer_message(user_id, message):
         return None
 
 # Couleur de fond en utilisant st.markdown pour une section
-st.markdown(
-    """
-    <style>
-    .reportview-container {
-        background-color: #f0f8ff; /* Couleur de fond */
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
+page_bg_img = '''
+<style>
+[data-testid="stMain"] {
+background-color: #f0f8ff; /* Couleur de fond */
+}
+</style>
+'''
+
+st.markdown(page_bg_img, unsafe_allow_html=True)
 
 
 
