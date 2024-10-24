@@ -34,11 +34,11 @@ def envoyer_message(user_id, message):
 # Injecter du CSS pour personnaliser le fond
 page_bg_img = '''
 <style>
-.stApp {
-    background-image: url("https://images.unsplash.com/photo-1511450036257-9c4a2a1fa029?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDN8fGVkdWNhdGlvbnxlbnwwfHx8fDE2NDk1NzcyMDg&ixlib=rb-1.2.1&q=80&w=1080");
+body {
+    background-image: url("https://images.unsplash.com/photo-1503676260728-1c00da094a0b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDEwfGVkdWNhdGlvbnxlbnwwfHx8fDE2NDk1Nzc3NjI&ixlib=rb-1.2.1&q=80&w=1080");
     background-size: cover;
     background-position: center;
-    color: white;
+    color: green;
     padding: 20px;
 }
 </style>
