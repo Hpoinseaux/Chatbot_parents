@@ -19,49 +19,62 @@ def envoyer_message(user_id, message):
             "payload": message
         }
     }
+    
+    # Effectuer la requête
     response = requests.post(url, json=data, headers=headers)
     
+    
+    # Vérification de la réponse
     if response.status_code == 200:
-        return response.json()
+        return response.json()  # Retourne la réponse JSON si elle est correcte
     else:
         st.error(f"Erreur avec l'API: {response.status_code}")
         return None
 
-# Interface Streamlit
-st.title("Chatbot Voiceflow avec Streamlit")
+# Injecter du CSS pour personnaliser le fond
+page_bg_img = '''
+<style>
+.stApp {
+    background-image: url("https://images.unsplash.com/photo-1511450036257-9c4a2a1fa029?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDN8fGVkdWNhdGlvbnxlbnwwfHx8fDE2NDk1NzcyMDg&ixlib=rb-1.2.1&q=80&w=1080");
+    background-size: cover;
+    background-position: center;
+    color: white;
+}
+</style>
+'''
+st.markdown(page_bg_img, unsafe_allow_html=True)
 
-# Initialisation de l'historique
+# Ajouter une image au-dessus du titre (liée à l'éducation)
+st.image("https://images.unsplash.com/photo-1503676260728-1c00da094a0b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDEwfGVkdWNhdGlvbnxlbnwwfHx8fDE2NDk1Nzc3NjI&ixlib=rb-1.2.1&q=80&w=1080", use_column_width=True)
+
+# Interface Streamlit
+st.title("assitant ASH pour les parents")
+
 if 'historique' not in st.session_state:
     st.session_state['historique'] = []
 if 'user_id' not in st.session_state:
-    st.session_state['user_id'] = "user123"  # Un identifiant unique pour chaque utilisateur
+    st.session_state['user_id'] = "user123"  # Peut être un identifiant unique pour chaque utilisateur
 
-# Affichage de l'historique des messages
-for message in st.session_state['historique']:
-    if message['role'] == 'user':
-        st.write(f"**Toi:** {message['message']}")
-    else:
-        st.write(f"**Bot:** {message['message']}")
-
-# Barre de message en bas de la page
-message = st.text_input("Tu peux poser une question:", key="input_message")
+message = st.text_input("Tu peux poser une question:")
 
 if st.button("Envoyer"):
     if message:
-        # Envoyer le message à Voiceflow et obtenir la réponse
+        # Envoyer la requête au chatbot Voiceflow
         reponse = envoyer_message(st.session_state['user_id'], message)
         
         if reponse:
             # Ajouter le message de l'utilisateur à l'historique
             st.session_state['historique'].append({"role": "user", "message": message})
-            
-            # Ajouter la réponse du bot à l'historique
+    
+            # Parcourir chaque événement dans la réponse
             for event in reponse:
+                # Vérifier que c'est bien un type "text" et que "payload" contient "message"
                 if event.get("type") == "text" and "payload" in event:
                     st.session_state['historique'].append({"role": "bot", "message": event["payload"]["message"]})
-        
-        # Effacer le champ de texte après l'envoi
-        st.session_state.input_message = ""
-        
-        # Redessiner la page pour afficher le nouvel historique
-        st.experimental_rerun()
+
+# Afficher l'historique de la conversation
+for message in st.session_state['historique']:
+    if message['role'] == 'user':
+        st.write(f"**Moi:** {message['message']}")
+    else:
+        st.write(f"**assistant ASH:** {message['message']}")
