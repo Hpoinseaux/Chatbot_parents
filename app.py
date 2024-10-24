@@ -52,7 +52,6 @@ st.image("https://images.unsplash.com/photo-1503676260728-1c00da094a0b?crop=entr
 st.title("Assistant ASH pour les parents")
 
 st.markdown("""
-### Description de l'assistant
 Je suis votre assistant , conçu pour vous aider à naviguer à travers les questions et les préoccupations concernant les situations des élèves à besoins particuliers. Mon objectif est de vous fournir des informations claires et rassurantes. 
 N'hésitez pas à poser vos questions : je suis là pour vous écouter et vous soutenir à chaque étape de votre parcours. Que ce soit pour des conseils, des informations sur les procédures ou des ressources, je suis ici pour vous aider !
 """)
