@@ -32,7 +32,7 @@ def envoyer_message(user_id, message):
         return None
 
 
-st.markdown("<h1 style='text-align: right;'>Hadrien Poinseaux</h1>", unsafe_allow_html=True)
+st.markdown("<h3 style='text-align: right; font-size: 14px;'>Hadrien Poinseaux</h3>", unsafe_allow_html=True)
 
 # Couleur de fond en utilisant st.markdown pour une section
 page_bg_img = '''
