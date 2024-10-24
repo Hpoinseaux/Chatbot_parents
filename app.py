@@ -35,7 +35,7 @@ def envoyer_message(user_id, message):
 page_bg_img = '''
 <style>
 [data-testid="stMain"] {
-background-color: #f0f8ff; /* Couleur de fond */
+background-color: #9dcfb6; /* Couleur de fond */
 }
 </style>
 '''
@@ -50,6 +50,13 @@ st.image("https://images.unsplash.com/photo-1503676260728-1c00da094a0b?crop=entr
 
 # Interface Streamlit
 st.title("Assistant ASH pour les parents")
+
+st.markdown("""
+### Description de l'assistant
+Je suis votre assistant , conçu pour vous aider à naviguer à travers les questions et les préoccupations concernant les situations des élèves à besoins particuliers. Mon objectif est de vous fournir des informations claires et rassurantes. 
+N'hésitez pas à poser vos questions : je suis là pour vous écouter et vous soutenir à chaque étape de votre parcours. Que ce soit pour des conseils, des informations sur les procédures ou des ressources, je suis ici pour vous aider !
+""")
+
 
 if 'historique' not in st.session_state:
     st.session_state['historique'] = []
