@@ -19,14 +19,10 @@ def envoyer_message(user_id, message):
             "payload": message
         }
     }
-    
-    # Effectuer la requête
     response = requests.post(url, json=data, headers=headers)
     
-    
-    # Vérification de la réponse
     if response.status_code == 200:
-        return response.json()  # Retourne la réponse JSON si elle est correcte
+        return response.json()
     else:
         st.error(f"Erreur avec l'API: {response.status_code}")
         return None
@@ -34,31 +30,38 @@ def envoyer_message(user_id, message):
 # Interface Streamlit
 st.title("Chatbot Voiceflow avec Streamlit")
 
+# Initialisation de l'historique
 if 'historique' not in st.session_state:
     st.session_state['historique'] = []
 if 'user_id' not in st.session_state:
-    st.session_state['user_id'] = "user123"  # Peut être un identifiant unique pour chaque utilisateur
+    st.session_state['user_id'] = "user123"  # Un identifiant unique pour chaque utilisateur
 
-message = st.text_input("Tu peux poser une question:")
-
-if st.button("Envoyer"):
-    if message:
-        # Envoyer la requête au chatbot Voiceflow
-        reponse = envoyer_message(st.session_state['user_id'], message)
-        
-        if reponse:
-            # Ajouter le message de l'utilisateur à l'historique
-            st.session_state['historique'].append({"role": "user", "message": message})
-    
-            # Parcourir chaque événement dans la réponse
-            for event in reponse:
-                # Vérifier que c'est bien un type "text" et que "payload" contient "message"
-                if event.get("type") == "text" and "payload" in event:
-                    st.session_state['historique'].append({"role": "bot", "message": event["payload"]["message"]})
-
-# Afficher l'historique de la conversation
+# Affichage de l'historique des messages
 for message in st.session_state['historique']:
     if message['role'] == 'user':
         st.write(f"**Toi:** {message['message']}")
     else:
         st.write(f"**Bot:** {message['message']}")
+
+# Barre de message en bas de la page
+message = st.text_input("Tu peux poser une question:", key="input_message")
+
+if st.button("Envoyer"):
+    if message:
+        # Envoyer le message à Voiceflow et obtenir la réponse
+        reponse = envoyer_message(st.session_state['user_id'], message)
+        
+        if reponse:
+            # Ajouter le message de l'utilisateur à l'historique
+            st.session_state['historique'].append({"role": "user", "message": message})
+            
+            # Ajouter la réponse du bot à l'historique
+            for event in reponse:
+                if event.get("type") == "text" and "payload" in event:
+                    st.session_state['historique'].append({"role": "bot", "message": event["payload"]["message"]})
+        
+        # Effacer le champ de texte après l'envoi
+        st.session_state.input_message = ""
+        
+        # Redessiner la page pour afficher le nouvel historique
+        st.experimental_rerun()
