@@ -31,23 +31,20 @@ def envoyer_message(user_id, message):
         st.error(f"Erreur avec l'API: {response.status_code}")
         return None
 
-# Style de l'application
+# Couleur de fond en utilisant st.markdown pour une section
 st.markdown(
     """
     <style>
-    .main {
+    .reportview-container {
         background-color: #f0f8ff; /* Couleur de fond */
-        padding: 20px; /* Ajout d'un peu de marge */
-        border-radius: 10px; /* Coins arrondis */
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Ombre */
     }
     </style>
     """,
     unsafe_allow_html=True
 )
 
-# Création d'une section principale
-st.markdown('<div class="main">', unsafe_allow_html=True)
+
+
 
 # Ajouter une image au-dessus du titre (liée à l'éducation)
 st.image("https://images.unsplash.com/photo-1503676260728-1c00da094a0b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDEwfGVkdWNhdGlvbnxlbnwwfHx8fDE2NDk1Nzc3NjI&ixlib=rb-1.2.1&q=80&w=1080", use_column_width=True)
