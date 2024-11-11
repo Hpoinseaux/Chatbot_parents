@@ -81,6 +81,8 @@ with placeholder.container():
     message = st.text_input("Poser vos questions:")
     if st.button("Envoyer"):
         if message:
+             # Ajouter le message de l'utilisateur à l'historique avant de faire l'appel
+            st.session_state['historique'].append({"role": "user", "message": message})
             # Envoyer la requête au chatbot Voiceflow
             reponse = envoyer_message(st.session_state['user_id'], message)
             
@@ -94,5 +96,5 @@ with placeholder.container():
                     if event.get("type") == "text" and "payload" in event:
                         st.session_state['historique'].append({"role": "bot", "message": event["payload"]["message"]})
 
-    # Rechargement pour garder le champ de texte et le bouton en bas
-    st.experimental_set_query_params(keep=True)
+            # Rechargement pour garder le champ de texte et le bouton en bas
+            st.experimental_set_query_params(keep=True)
