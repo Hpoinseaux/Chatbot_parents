@@ -73,28 +73,32 @@ for message in st.session_state['historique']:
     else:
         st.write(f"**assistant ASH:** {message['message']}")
 
-# Afficher la barre de texte et le bouton d'envoi en bas de la page
-placeholder = st.empty()  # Crée un espace réservé en bas de la page
+# Afficher l'historique de la conversation dans un conteneur
+conversation_container = st.container()
 
-with placeholder.container():
-    # Saisie de texte et bouton Envoyer
-    message = st.text_input("Poser vos questions:")
-    if st.button("Envoyer"):
-        if message:
-             # Ajouter le message de l'utilisateur à l'historique avant de faire l'appel
-            st.session_state['historique'].append({"role": "user", "message": message})
-            # Envoyer la requête au chatbot Voiceflow
-            reponse = envoyer_message(st.session_state['user_id'], message)
-            
-            if reponse:
-                # Ajouter le message de l'utilisateur à l'historique
-                st.session_state['historique'].append({"role": "user", "message": message})
+with conversation_container:
+    for message in st.session_state['historique']:
+        if message['role'] == 'user':
+            st.write(f"**Moi:** {message['message']}")
+        else:
+            st.write(f"**assistant ASH:** {message['message']}")
+
+# Ajouter la barre de texte et le bouton en bas sans rechargement
+message = st.text_input("Poser vos questions:")
+
+if st.button("Envoyer"):
+    if message:
+        # Ajouter le message utilisateur à l'historique
+        st.session_state['historique'].append({"role": "user", "message": message})
         
-                # Parcourir chaque événement dans la réponse
-                for event in reponse:
-                    # Vérifier que c'est bien un type "text" et que "payload" contient "message"
-                    if event.get("type") == "text" and "payload" in event:
-                        st.session_state['historique'].append({"role": "bot", "message": event["payload"]["message"]})
+        # Envoyer la requête au chatbot Voiceflow
+        reponse = envoyer_message(st.session_state['user_id'], message)
+        
+        # Ajouter la réponse du bot directement à l'historique sans rechargement global
+        if reponse:
+            for event in reponse:
+                if event.get("type") == "text" and "payload" in event:
+                    st.session_state['historique'].append({"role": "bot", "message": event["payload"]["message"]})
 
-            # Rechargement pour garder le champ de texte et le bouton en bas
-            st.experimental_set_query_params(keep=True)
+        # Effacer le champ de saisie
+        st.experimental_rerun()  # Rafraîchir le champ de saisie uniquement
