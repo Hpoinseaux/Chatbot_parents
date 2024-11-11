@@ -60,27 +60,11 @@ N'hésitez pas à poser vos questions : je suis là pour vous écouter et vous s
 """)
 
 
+# Initialiser l'état de session pour l'historique de la conversation
 if 'historique' not in st.session_state:
     st.session_state['historique'] = []
 if 'user_id' not in st.session_state:
     st.session_state['user_id'] = "user123"  # Peut être un identifiant unique pour chaque utilisateur
-
-message = st.text_input("Poser vos questions:")
-
-if st.button("Envoyer"):
-    if message:
-        # Envoyer la requête au chatbot Voiceflow
-        reponse = envoyer_message(st.session_state['user_id'], message)
-        
-        if reponse:
-            # Ajouter le message de l'utilisateur à l'historique
-            st.session_state['historique'].append({"role": "user", "message": message})
-    
-            # Parcourir chaque événement dans la réponse
-            for event in reponse:
-                # Vérifier que c'est bien un type "text" et que "payload" contient "message"
-                if event.get("type") == "text" and "payload" in event:
-                    st.session_state['historique'].append({"role": "bot", "message": event["payload"]["message"]})
 
 # Afficher l'historique de la conversation
 for message in st.session_state['historique']:
@@ -88,3 +72,27 @@ for message in st.session_state['historique']:
         st.write(f"**Moi:** {message['message']}")
     else:
         st.write(f"**assistant ASH:** {message['message']}")
+
+# Afficher la barre de texte et le bouton d'envoi en bas de la page
+placeholder = st.empty()  # Crée un espace réservé en bas de la page
+
+with placeholder.container():
+    # Saisie de texte et bouton Envoyer
+    message = st.text_input("Poser vos questions:")
+    if st.button("Envoyer"):
+        if message:
+            # Envoyer la requête au chatbot Voiceflow
+            reponse = envoyer_message(st.session_state['user_id'], message)
+            
+            if reponse:
+                # Ajouter le message de l'utilisateur à l'historique
+                st.session_state['historique'].append({"role": "user", "message": message})
+        
+                # Parcourir chaque événement dans la réponse
+                for event in reponse:
+                    # Vérifier que c'est bien un type "text" et que "payload" contient "message"
+                    if event.get("type") == "text" and "payload" in event:
+                        st.session_state['historique'].append({"role": "bot", "message": event["payload"]["message"]})
+
+    # Rechargement pour garder le champ de texte et le bouton en bas
+    st.experimental_rerun()
