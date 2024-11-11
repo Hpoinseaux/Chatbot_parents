@@ -65,8 +65,7 @@ if 'historique' not in st.session_state:
     st.session_state['historique'] = []
 if 'user_id' not in st.session_state:
     st.session_state['user_id'] = "user123"  # Peut être un identifiant unique pour chaque utilisateur
-if 'message' not in st.session_state:
-    st.session_state['message'] = "" 
+
 
 # Afficher l'historique de la conversation dans un conteneur
 conversation_container = st.container()
@@ -79,7 +78,7 @@ with conversation_container:
             st.write(f"**assistant ASH:** {message['message']}")
 
 # Ajouter la barre de texte et le bouton en bas sans rechargement
-message = st.text_input("Poser vos questions:")
+message = st.text_input("Poser vos questions:", key="message_input")
 
 if st.button("Envoyer"):
     if message:
@@ -96,4 +95,4 @@ if st.button("Envoyer"):
                     st.session_state['historique'].append({"role": "bot", "message": event["payload"]["message"]})
 
         # Effacer le champ de saisie
-        st.session_state['message'] = ""
+        st.session_state['message_input'] = ""
