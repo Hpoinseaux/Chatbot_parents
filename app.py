@@ -32,7 +32,7 @@ def envoyer_message(user_id, message):
         return None
 
 
-st.markdown("<h1 style='text-align: right;'>Hadrien Poinseaux</h1>", unsafe_allow_html=True)
+st.markdown("<h3 style='text-align: right; font-size: 14px;'>Hadrien Poinseaux</h3>", unsafe_allow_html=True)
 
 # Couleur de fond en utilisant st.markdown pour une section
 page_bg_img = '''
@@ -60,40 +60,31 @@ N'hésitez pas à poser vos questions : je suis là pour vous écouter et vous s
 """)
 
 
-# Initialiser l'état de session pour l'historique de la conversation
 if 'historique' not in st.session_state:
     st.session_state['historique'] = []
 if 'user_id' not in st.session_state:
     st.session_state['user_id'] = "user123"  # Peut être un identifiant unique pour chaque utilisateur
-if 'message_input' not in st.session_state:
-    st.session_state['message_input'] = "" 
 
-# Afficher l'historique de la conversation dans un conteneur
-conversation_container = st.container()
-
-with conversation_container:
-    for message in st.session_state['historique']:
-        if message['role'] == 'user':
-            st.write(f"**Moi:** {message['message']}")
-        else:
-            st.write(f"**assistant ASH:** {message['message']}")
-
-# Ajouter la barre de texte et le bouton en bas sans rechargement
-message = st.text_area("Poser vos questions:", value=st.session_state['message_input'], key="message_input")
+message = st.text_input("Poser vos questions:")
 
 if st.button("Envoyer"):
     if message:
-        # Ajouter le message utilisateur à l'historique
-        st.session_state['historique'].append({"role": "user", "message": message})
-        
         # Envoyer la requête au chatbot Voiceflow
         reponse = envoyer_message(st.session_state['user_id'], message)
         
-        # Ajouter la réponse du bot directement à l'historique
         if reponse:
+            # Ajouter le message de l'utilisateur à l'historique
+            st.session_state['historique'].append({"role": "user", "message": message})
+    
+            # Parcourir chaque événement dans la réponse
             for event in reponse:
+                # Vérifier que c'est bien un type "text" et que "payload" contient "message"
                 if event.get("type") == "text" and "payload" in event:
                     st.session_state['historique'].append({"role": "bot", "message": event["payload"]["message"]})
 
-        # Effacer le champ de saisie
-        st.experimental_set_query_params(keep=True)
+# Afficher l'historique de la conversation
+for message in st.session_state['historique']:
+    if message['role'] == 'user':
+        st.write(f"**Moi:** {message['message']}")
+    else:
+        st.write(f"**assistant ASH:** {message['message']}")
