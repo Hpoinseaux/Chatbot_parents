@@ -65,15 +65,6 @@ if 'historique' not in st.session_state:
 if 'user_id' not in st.session_state:
     st.session_state['user_id'] = "user123"  # Peut être un identifiant unique pour chaque utilisateur
 
-
-# Afficher l'historique de la conversation
-for message in st.session_state['historique']:
-    if message['role'] == 'user':
-        st.write(f"**Moi:** {message['message']}")
-    else:
-        st.write(f"**assistant ASH:** {message['message']}")
-
-
 message = st.text_input("Poser vos questions:")
 
 if st.button("Envoyer"):
@@ -91,3 +82,9 @@ if st.button("Envoyer"):
                 if event.get("type") == "text" and "payload" in event:
                     st.session_state['historique'].append({"role": "bot", "message": event["payload"]["message"]})
 
+# Afficher l'historique de la conversation
+for message in st.session_state['historique']:
+    if message['role'] == 'user':
+        st.write(f"**Moi:** {message['message']}")
+    else:
+        st.write(f"**assistant ASH:** {message['message']}")
