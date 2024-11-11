@@ -101,4 +101,4 @@ if st.button("Envoyer"):
                     st.session_state['historique'].append({"role": "bot", "message": event["payload"]["message"]})
 
         # Effacer le champ de saisie
-        st.experimental_rerun()  # Rafraîchir le champ de saisie uniquement
+        st.experimental_set_query_params(keep=True)  # Rafraîchir le champ de saisie uniquement
