@@ -65,13 +65,8 @@ if 'historique' not in st.session_state:
     st.session_state['historique'] = []
 if 'user_id' not in st.session_state:
     st.session_state['user_id'] = "user123"  # Peut être un identifiant unique pour chaque utilisateur
-
-# Afficher l'historique de la conversation
-for message in st.session_state['historique']:
-    if message['role'] == 'user':
-        st.write(f"**Moi:** {message['message']}")
-    else:
-        st.write(f"**assistant ASH:** {message['message']}")
+if 'message' not in st.session_state:
+    st.session_state['message'] = "" 
 
 # Afficher l'historique de la conversation dans un conteneur
 conversation_container = st.container()
@@ -94,11 +89,11 @@ if st.button("Envoyer"):
         # Envoyer la requête au chatbot Voiceflow
         reponse = envoyer_message(st.session_state['user_id'], message)
         
-        # Ajouter la réponse du bot directement à l'historique sans rechargement global
+        # Ajouter la réponse du bot directement à l'historique
         if reponse:
             for event in reponse:
                 if event.get("type") == "text" and "payload" in event:
                     st.session_state['historique'].append({"role": "bot", "message": event["payload"]["message"]})
 
         # Effacer le champ de saisie
-        st.experimental_set_query_params(keep=True)  # Rafraîchir le champ de saisie uniquement
+        st.session_state['message'] = ""
