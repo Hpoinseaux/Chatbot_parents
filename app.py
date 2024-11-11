@@ -95,4 +95,4 @@ with placeholder.container():
                         st.session_state['historique'].append({"role": "bot", "message": event["payload"]["message"]})
 
     # Rechargement pour garder le champ de texte et le bouton en bas
-    st.experimental_rerun()
+    st.experimental_set_query_params(keep=True)
