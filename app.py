@@ -1,37 +1,35 @@
 import streamlit as st
-import requests
+import openai
 
-# Configuration de l'API Voiceflow
-API_KEY = "VF.DM.671a045c21ddde63559a41cf.7jM8hYY9yfeP49f2"  # Remplace par ta clé API Voiceflow
-VERSION_ID = "6719ff054691e037ca52e0ec"  # Remplace par l'ID de version de ton projet
+# Récupérer la clé API depuis les secrets Streamlit Cloud
+openai.api_key = st.secrets["OPENAI_API_KEY"]
 
-BASE_URL = f"https://general-runtime.voiceflow.com/state/{VERSION_ID}/user"
+# Vérifier si la clé API est présente
+if openai.api_key is None:
+    st.error("La clé API OpenAI n'est pas définie dans les secrets.")
+    st.stop()  # Arrêter l'exécution si la clé API est absente
 
-def envoyer_message(user_id, message):
-    url = f"{BASE_URL}/{user_id}/interact"
-    headers = {
-        "Authorization": API_KEY,
-        "Content-Type": "application/json"
-    }
-    data = {
-        "request": {
-            "type": "text",
-            "payload": message
-        }
-    }
+# Fonction pour envoyer la requête à OpenAI et obtenir la réponse
+def envoyer_message_openai(message):
+    # Définir le prompt pour donner un ton rassurant et empathique
+    prompt = f"""
+    Vous êtes un enseignant qui répond à des parents ayant des préoccupations concernant leurs enfants. Votre ton doit être rassurant, calme et empathique. Vous devez répondre aux questions des parents avec bienveillance et patience.
+    Question : {message}
+    Réponse :
+    """
+
+    # Appel à l'API OpenAI pour générer la réponse
+    response = openai.Completion.create(
+        model="gpt-3.5-turbo",  # Ou gpt-4 si tu utilises cette version
+        prompt=prompt,
+        temperature=0.7,  # Ton modéré, rassurant
+        max_tokens=600,   # Limite de la longueur de la réponse
+    )
     
-    # Effectuer la requête
-    response = requests.post(url, json=data, headers=headers)
-    
-    
-    # Vérification de la réponse
-    if response.status_code == 200:
-        return response.json()  # Retourne la réponse JSON si elle est correcte
-    else:
-        st.error(f"Erreur avec l'API: {response.status_code}")
-        return None
+    # Retourner la réponse générée
+    return response.choices[0].text.strip()
 
-
+# Interface Streamlit
 st.markdown("<h3 style='text-align: right; font-size: 14px;'>Hadrien Poinseaux</h3>", unsafe_allow_html=True)
 
 # Couleur de fond en utilisant st.markdown pour une section
@@ -45,9 +43,6 @@ background-color: #9dcfb6; /* Couleur de fond */
 
 st.markdown(page_bg_img, unsafe_allow_html=True)
 
-
-
-
 # Ajouter une image au-dessus du titre (liée à l'éducation)
 st.image("https://images.unsplash.com/photo-1503676260728-1c00da094a0b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDEwfGVkdWNhdGlvbnxlbnwwfHx8fDE2NDk1Nzc3NjI&ixlib=rb-1.2.1&q=80&w=1080", use_column_width=True)
 
@@ -55,36 +50,30 @@ st.image("https://images.unsplash.com/photo-1503676260728-1c00da094a0b?crop=entr
 st.title("Assistant ASH pour les parents")
 
 st.markdown("""
-Je suis votre assistant , conçu pour vous aider à naviguer à travers les questions et les préoccupations concernant les situations des élèves à besoins particuliers. Mon objectif est de vous fournir des informations claires et rassurantes. 
+Je suis votre assistant, conçu pour vous aider à naviguer à travers les questions et préoccupations concernant les situations des élèves à besoins particuliers. Mon objectif est de vous fournir des informations claires et rassurantes.
 N'hésitez pas à poser vos questions : je suis là pour vous écouter et vous soutenir à chaque étape de votre parcours. Que ce soit pour des conseils, des informations sur les procédures ou des ressources, je suis ici pour vous aider !
 """)
 
-
 if 'historique' not in st.session_state:
     st.session_state['historique'] = []
-if 'user_id' not in st.session_state:
-    st.session_state['user_id'] = "user123"  # Peut être un identifiant unique pour chaque utilisateur
 
+# Texte d'entrée pour poser une question
 message = st.text_input("Poser vos questions:")
 
 if st.button("Envoyer"):
     if message:
-        # Envoyer la requête au chatbot Voiceflow
-        reponse = envoyer_message(st.session_state['user_id'], message)
+        # Ajouter le message de l'utilisateur à l'historique
+        st.session_state['historique'].append({"role": "user", "message": message})
         
-        if reponse:
-            # Ajouter le message de l'utilisateur à l'historique
-            st.session_state['historique'].append({"role": "user", "message": message})
-    
-            # Parcourir chaque événement dans la réponse
-            for event in reponse:
-                # Vérifier que c'est bien un type "text" et que "payload" contient "message"
-                if event.get("type") == "text" and "payload" in event:
-                    st.session_state['historique'].append({"role": "bot", "message": event["payload"]["message"]})
+        # Envoyer la requête à OpenAI pour obtenir la réponse
+        reponse = envoyer_message_openai(message)
+        
+        # Ajouter la réponse du chatbot à l'historique
+        st.session_state['historique'].append({"role": "bot", "message": reponse})
 
 # Afficher l'historique de la conversation
 for message in st.session_state['historique']:
     if message['role'] == 'user':
         st.write(f"**Moi:** {message['message']}")
     else:
-        st.write(f"**assistant ASH:** {message['message']}")
+        st.write(f"**Assistant ASH:** {message['message']}")
