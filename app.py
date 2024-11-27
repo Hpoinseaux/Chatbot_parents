@@ -1,8 +1,8 @@
 import streamlit as st
 import openai
-from openai import OpenAI
 
-client = OpenAI()
+
+
 # Récupérer la clé API depuis les secrets Streamlit Cloud
 openai.api_key = st.secrets["OPENAI_API_KEY"]
 
