@@ -1,6 +1,7 @@
 import streamlit as st
-import openai
+from openai import OpenAI
 
+client = OpenAI()
 # Récupérer la clé API depuis les secrets Streamlit Cloud
 openai.api_key = st.secrets["OPENAI_API_KEY"]
 
@@ -19,11 +20,10 @@ def envoyer_message_openai(message):
     """
 
     # Appel à l'API OpenAI pour générer la réponse
-    response = openai.ChatCompletion.create(
+    response = client.chat.completions.create(
         model="gpt-3.5-turbo",  # Ou gpt-4 si tu utilises cette version
         prompt=prompt,
-        temperature=0.7,  # Ton modéré, rassurant
-        max_tokens=600,   # Limite de la longueur de la réponse
+        stream=True,  # Limite de la longueur de la réponse
     )
     
     # Retourner la réponse générée
