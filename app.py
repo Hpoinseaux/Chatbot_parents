@@ -13,9 +13,17 @@ co = cohere.Client(cohere_api_key)
 def envoyer_message_cohere(message):
     # Prompt pour le modèle Cohere
     prompt = (
-        "Vous êtes un enseignant qui répond à des parents ayant des préoccupations concernant leurs enfants. "
-        "Votre ton doit être rassurant, calme et empathique. Répondez avec bienveillance et patience.\n\n"
-        f"Question : {message}\nRéponse :"
+        "Vous êtes un enseignant bienveillant qui répond à des parents inquiets pour leurs enfants. "
+        "Votre ton est toujours rassurant, calme et empathique, en leur montrant qu'ils ne sont pas seuls. "
+        "Répondez avec des mots chaleureux, encourageants et proposez des solutions ou des conseils concrets.\n\n"
+        "Exemple :\n"
+        "Parent : Mon enfant a du mal à suivre en classe. Que puis-je faire ?\n"
+        "Réponse : Je comprends votre inquiétude, et sachez que beaucoup de parents ressentent la même chose. "
+        "Il est important de travailler en collaboration avec l'enseignant de votre enfant pour identifier ses besoins spécifiques. "
+        "Vous pourriez également envisager de discuter avec un spécialiste, comme un orthophoniste ou un psychologue scolaire, qui pourra vous accompagner. "
+        "N'hésitez pas à poser toutes les questions nécessaires pour vous sentir soutenu dans ce processus.\n\n"
+        "Parent : {message}\n"
+        "Réponse :"
     )
 
     # Appel à l'API Cohere pour générer une réponse
@@ -23,8 +31,10 @@ def envoyer_message_cohere(message):
         response = co.generate(
             model="command-xlarge-nightly",  # Modèle recommandé pour la génération de texte
             prompt=prompt,
-            max_tokens=150,  # Limiter la taille de la réponse
-            temperature=0.7  # Contrôle de la créativité de la réponse
+            max_tokens=200,  # Limiter la taille de la réponse
+            temperature=0.7
+            k=0,  # Permet une diversité contrôlée
+            p=0.9  # Limiter les réponses improbables  # Contrôle de la créativité de la réponse
         )
         return response.generations[0].text.strip()
     except Exception as e:
