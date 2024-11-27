@@ -24,8 +24,8 @@ def envoyer_message_cohere(message):
         response = co.generate(
             model="command-xlarge-nightly",  # Modèle recommandé pour la génération de texte
             prompt=prompt,
-            max_tokens=300,  # Limiter la taille de la réponse
-            temperature=0.6,
+            max_tokens=400,  # Limiter la taille de la réponse
+            temperature=0.5,
             stop_sequences=["Fin de réponse."]
         )
         # Récupérer la réponse générée
