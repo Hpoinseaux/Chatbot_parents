@@ -29,7 +29,7 @@ def envoyer_message_openai(message):
 
     # Appel à l'API OpenAI pour générer la réponse
     response = openai.ChatCompletion.create(
-        model="text-davinci-002",  # Ou gpt-4 si tu utilises cette version
+        model="gpt-3.5-turbo",  # Ou gpt-4 si tu utilises cette version
         messages=messages
     )
     
