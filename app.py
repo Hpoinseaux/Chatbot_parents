@@ -26,6 +26,8 @@ def envoyer_message_cohere(message):
             prompt=prompt,
             max_tokens=400,  # Limiter la taille de la réponse
             temperature=0.5,
+            k=0,
+            p=0.9,
             stop_sequences=["Fin de réponse."]
         )
         # Récupérer la réponse générée
