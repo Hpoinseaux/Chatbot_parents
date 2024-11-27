@@ -11,24 +11,30 @@ if openai.api_key is None:
     st.error("La clé API OpenAI n'est pas définie dans les secrets.")
     st.stop()  # Arrêter l'exécution si la clé API est absente
 
-# Fonction pour envoyer la requête à OpenAI et obtenir la réponse
 def envoyer_message_openai(message):
-    # Définir le prompt pour donner un ton rassurant et empathique
-    prompt = f"""
-    Vous êtes un enseignant qui répond à des parents ayant des préoccupations concernant leurs enfants. Votre ton doit être rassurant, calme et empathique. Vous devez répondre aux questions des parents avec bienveillance et patience.
-    Question : {message}
-    Réponse :
-    """
+    # Construction du contexte de conversation sous forme de messages
+    messages = [
+        {
+            "role": "system",
+            "content": (
+                "Vous êtes un enseignant qui répond à des parents ayant des préoccupations concernant leurs enfants. "
+                "Votre ton doit être rassurant, calme et empathique. Répondez avec bienveillance et patience."
+            )
+        },
+        {
+            "role": "user",
+            "content": message
+        }
+    ]
 
     # Appel à l'API OpenAI pour générer la réponse
-    response = client.chat.completions.create(
+    response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",  # Ou gpt-4 si tu utilises cette version
-        prompt=prompt,
-        stream=True,  # Limite de la longueur de la réponse
+        messages=messages
     )
     
     # Retourner la réponse générée
-    return response.choices[0].text.strip()
+    return response['choices'][0]['message']['content'].strip()
 
 # Interface Streamlit
 st.markdown("<h3 style='text-align: right; font-size: 14px;'>Hadrien Poinseaux</h3>", unsafe_allow_html=True)
