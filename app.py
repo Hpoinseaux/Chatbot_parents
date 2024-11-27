@@ -44,7 +44,7 @@ background-color: #9dcfb6; /* Couleur de fond */
 st.markdown(page_bg_img, unsafe_allow_html=True)
 
 # Ajouter une image au-dessus du titre (liée à l'éducation)
-st.image("https://images.unsplash.com/photo-1503676260728-1c00da094a0b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDEwfGVkdWNhdGlvbnxlbnwwfHx8fDE2NDk1Nzc3NjI&ixlib=rb-1.2.1&q=80&w=1080", use_column_width=True)
+st.image("https://images.unsplash.com/photo-1503676260728-1c00da094a0b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDEwfGVkdWNhdGlvbnxlbnwwfHx8fDE2NDk1Nzc3NjI&ixlib=rb-1.2.1&q=80&w=1080", use_container_width=True)
 
 # Interface Streamlit
 st.title("Assistant ASH pour les parents")
