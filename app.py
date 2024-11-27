@@ -25,9 +25,7 @@ def envoyer_message_cohere(message):
             model="command-xlarge-nightly",  # Modèle recommandé pour la génération de texte
             prompt=prompt,
             max_tokens=300,  # Limiter la taille de la réponse
-            temperature=0.7,
-            k=0,  # Permet une diversité contrôlée
-            p=0.9  # Limiter les réponses improbables  # Contrôle de la créativité de la réponse
+            temperature=0.7
         )
         return response.generations[0].text.strip()
     except Exception as e:
