@@ -30,7 +30,8 @@ def envoyer_message_openai(message):
     # Appel à l'API OpenAI pour générer la réponse
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",  # Ou gpt-4 si tu utilises cette version
-        messages=messages
+        messages=messages,
+        max_tokens=100
     )
     
     # Retourner la réponse générée
