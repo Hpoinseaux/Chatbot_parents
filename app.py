@@ -25,9 +25,9 @@ def envoyer_message_cohere(message):
             model="command-xlarge-nightly",  # Modèle recommandé pour la génération de texte
             prompt=prompt,
             max_tokens=400,  # Limiter la taille de la réponse
-            temperature=0.5,
+            temperature=0.8,
             k=0,
-            p=0.9,
+            p=0.8,
             stop_sequences=["Fin de réponse."]
         )
         # Récupérer la réponse générée
