@@ -25,9 +25,18 @@ def envoyer_message_cohere(message):
             model="command-xlarge-nightly",  # Modèle recommandé pour la génération de texte
             prompt=prompt,
             max_tokens=300,  # Limiter la taille de la réponse
-            temperature=0.7
+            temperature=0.6,
+            stop_sequences=["Fin de réponse."]
         )
-        return response.generations[0].text.strip()
+        # Récupérer la réponse générée
+        generated_text = response.generations[0].text.strip()
+        
+        # Vérification pour supprimer un éventuel texte coupé
+        if "Fin de réponse." in generated_text:
+            generated_text = generated_text.split("Fin de réponse.")[0].strip()
+
+        return generated_text
+
     except Exception as e:
         return f"Une erreur s'est produite lors de la génération de la réponse : {e}"
 
